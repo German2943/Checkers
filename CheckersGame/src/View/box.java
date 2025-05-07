@@ -1,8 +1,11 @@
 package View;
 import javax.swing.JPanel;
+import java.awt.*;
+
 public class box extends JPanel{
     private int coordinateX;
     private int coordinateY;
+    BorderLayout border=new BorderLayout();
     public box(){
 
     }
