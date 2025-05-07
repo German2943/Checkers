@@ -25,13 +25,22 @@ public class Table extends JFrame {
                 }else {
                     singleBox.setBackground(Color.DARK_GRAY);
                 }
-                tablePanel.add(singleBox);
-                ImageIcon img=new ImageIcon("img/black.png");
+                if ((row<=1) || (row>=(numRows-1))){
 
-                JLabel LabelImg=new JLabel(img);
-                LabelImg.setHorizontalAlignment(SwingConstants.CENTER);
-                LabelImg.setVerticalAlignment(SwingConstants.CENTER);
-                singleBox.add(LabelImg, BorderLayout.CENTER);
+                    ImageIcon img=null;
+                    if(row<=1){
+                        img=new ImageIcon(getClass().getResource("img/black.png"));
+                    }else if(row>=(numRows-1)){
+                        img=new ImageIcon(getClass().getResource("img/white.png"));
+                    }
+
+
+                    JLabel LabelImg=new JLabel(img);
+                    LabelImg.setHorizontalAlignment(SwingConstants.CENTER);
+                    LabelImg.setVerticalAlignment(SwingConstants.CENTER);
+                    singleBox.add(LabelImg, BorderLayout.CENTER);
+                }
+                tablePanel.add(singleBox);
 
             }
         }
