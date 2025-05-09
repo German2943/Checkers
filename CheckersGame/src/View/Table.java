@@ -4,13 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Table extends JFrame {
-    private int numRows=9;
-    private int numCols=7;
+    private int numRows=8;
+    private int numCols=8;
 
 
     public Table(){
         setTitle("Checkers Game");
-        setSize(600, 600);
+        setSize(700, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel tablePanel= new JPanel();
@@ -30,21 +30,40 @@ public class Table extends JFrame {
                 }else {
                     singleBox.setBackground(Color.DARK_GRAY);
                 }
-                if ((row<=1) || (row>=(numRows-2))){
+                if ((row<=2) || (row>=(numRows-3))){
                     String color=null;
-                    if(row<=1){
+                    if(row<=2){
+
                         color="black";
+
+                        if (((row==0)||(row==2)) && (col%2==0)){
+                            chip singleChip=new chip(color);
+                            singleBox.add(singleChip);
+                            enableDrag(singleChip);
+                        }else if((row==1) && (col%2!=0)){
+                            chip singleChip=new chip(color);
+                            singleBox.add(singleChip);
+                            enableDrag(singleChip);
+                        }
                     }
-                    if((row>=(numRows-2)) ){
+                    if((row>=(numRows-3)) ){
                         color="white";
+
+                        if (((row==numRows-1)||(row==numRows-3)) && (col%2==0)){
+                            chip singleChip=new chip(color);
+                            singleBox.add(singleChip);
+                            enableDrag(singleChip);
+                        }else if((row==numRows-2) && (col%2!=0)){
+                            chip singleChip=new chip(color);
+                            singleBox.add(singleChip);
+                            enableDrag(singleChip);
+                        }
                     }
 
 
 
 
-                    chip singleChip=new chip(color);
-                    singleBox.add(singleChip);
-                    enableDrag(singleChip);
+
 
                 }
                 tablePanel.add(singleBox);
