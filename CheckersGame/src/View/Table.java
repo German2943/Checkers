@@ -1,7 +1,6 @@
 package View;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public abstract class Table extends JFrame {
     private int numRows=8;
@@ -83,4 +82,10 @@ public abstract class Table extends JFrame {
     }
 
     public abstract void enableDrag(chip chip);
+    public int getNumRows(){
+        return this.numRows;
+    }
+    public int getNumCols(){
+        return  this.numCols;
+    }
 }

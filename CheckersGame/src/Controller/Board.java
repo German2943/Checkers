@@ -93,6 +93,10 @@ public class Board extends Table{
                     destiny.add(chip);
                     destiny.setHasAChip(true);
                     origen.setHasAChip(false);
+                    if (chip.getColor().equalsIgnoreCase("black") && (destiny.getCoordinateY()==getNumRows()-1)){
+                        chip.changeToQueen();
+
+                    }
 
                 }else {
                     chip.setLocation(0,0);
