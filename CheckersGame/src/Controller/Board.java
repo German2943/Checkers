@@ -22,27 +22,53 @@ public class Board extends Table{
             @Override
             public void mouseReleased(java.awt.event.MouseEvent e){
                 Component comp=SwingUtilities.getDeepestComponentAt(getContentPane(), e.getXOnScreen()-getLocationOnScreen().x, e.getYOnScreen()-getLocationOnScreen().y);
-
+                box destiny=null;
                 if (comp instanceof box){
-                    box destiny=(box) comp;
-                    chip.setLocation(0,0);
-                    destiny.add(chip);
+                    destiny=(box) comp;
+
+
                 }else if(comp !=null && comp.getParent() instanceof box){
-                    box destiny=(box) comp.getParent();
+                    destiny=(box) comp.getParent();
+                }
+
+
+                box origen=(box) parentBox[0];
+                boolean validMove=false;
+                if (destiny!=null && origen!=null){
+                    int x0=origen.getCoordinateX();
+                    int y0=origen.getCoordinateY();
+                    int y1=destiny.getCoordinateY();
+                    int x1=destiny.getCoordinateX();
+
+
+                    int deltaX=x1-x0;
+                    int deltaY=y1-y0;
+
+                    String color=chip.getColor();
+
+                    if (Math.abs(deltaX)==1){
+                        if (color.equals("white") && deltaY==-1){
+                            validMove=true;
+                        }
+                        if (color.equals("black") && deltaY==1){
+                            validMove=true;
+                        }
+                    }
+                }
+                if (validMove){
                     chip.setLocation(0,0);
                     destiny.add(chip);
                 }else {
-                    if (parentBox[0]!=null){
-                        chip.setLocation(0,0);
-                        parentBox[0].add(chip);
-                    }
+                    chip.setLocation(0,0);
+                    origen.add(chip);
                 }
                 layeredPane.remove(chip);
                 layeredPane.setCursor(Cursor.getDefaultCursor());
-                parentBox[0].revalidate();
-                parentBox[0].repaint();
+
                 getContentPane().revalidate();
                 getContentPane().repaint();
+                origen.revalidate();
+                origen.repaint();
             }
         });
         chip.addMouseMotionListener(new java.awt.event.MouseMotionAdapter(){

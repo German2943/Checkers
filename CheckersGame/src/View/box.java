@@ -8,6 +8,7 @@ public class box extends JPanel{
     BorderLayout border=new BorderLayout();
     public box(){
 
+
     }
 
     public int getCoordinateX(){
