@@ -58,12 +58,32 @@ public class Board extends Table{
                         if (color.equals("white") && deltaY==-2 ){
                             if ((getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].getHasAChip())||(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].getHasAChip())){
                                 validMove=true;
+                                if (deltaX==2){
+                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].removeAll();
+                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].revalidate();
+                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].repaint();
+
+                                }else if (deltaX==-2){
+                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].removeAll();
+                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].revalidate();
+                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].repaint();
+                                }
                             }
 
                         }
                         if (color.equals("black") && deltaY==2){
                             if ((getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].getHasAChip())||(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].getHasAChip())){
                                 validMove=true;
+                                if (deltaX==2){
+                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].removeAll();
+                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].revalidate();
+                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].repaint();
+
+                                }else if (deltaX==-2){
+                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].removeAll();
+                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].revalidate();
+                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].repaint();
+                                }
                             }
                         }
                     }
