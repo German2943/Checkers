@@ -6,8 +6,11 @@ import java.awt.event.*;
 public abstract class Table extends JFrame {
     private int numRows=8;
     private int numCols=8;
+    private box[][] boxes=new box[numRows][numCols];
 
-
+    public box[][] getBoxes(){
+        return this.boxes;
+    }
     public Table(){
         setTitle("Checkers Game");
         setSize(700, 700);
@@ -23,6 +26,7 @@ public abstract class Table extends JFrame {
                 box singleBox=new box();
                 singleBox.setCoordinateX(col);
                 singleBox.setCoordinateY(row);
+                boxes[row][col]=singleBox;
 
 
                 if ((row + col)% 2 ==0){
@@ -36,12 +40,12 @@ public abstract class Table extends JFrame {
 
                         color="black";
 
-                        if (((row==0)||(row==2)) && (col%2==0)){
+                        if (((row==0)||(row==2)) && (col%2!=0)){
                             chip singleChip=new chip(color);
                             singleBox.add(singleChip);
                             singleBox.setHasAChip(true);
                             enableDrag(singleChip);
-                        }else if((row==1) && (col%2!=0)){
+                        }else if((row==1) && (col%2==0)){
                             chip singleChip=new chip(color);
                             singleBox.add(singleChip);
                             singleBox.setHasAChip(true);

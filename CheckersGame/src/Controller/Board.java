@@ -7,6 +7,7 @@ import java.awt.*;
 public class Board extends Table{
     @Override
     public   void enableDrag(chip chip){
+
         final Point[] offset={new Point()};
         final JLayeredPane layeredPane=getLayeredPane();
         final Container[] parentBox={null};
@@ -54,11 +55,16 @@ public class Board extends Table{
                             validMove=true;
                         }
                     }else if(Math.abs(deltaX)==2){
-                        if (color.equals("white") && deltaY==-1){
-                            validMove=true;
+                        if (color.equals("white") && deltaY==-2 ){
+                            if ((getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].getHasAChip())||(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].getHasAChip())){
+                                validMove=true;
+                            }
+
                         }
-                        if (color.equals("black") && deltaY==1){
-                            validMove=true;
+                        if (color.equals("black") && deltaY==2){
+                            if ((getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].getHasAChip())||(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].getHasAChip())){
+                                validMove=true;
+                            }
                         }
                     }
                 }
@@ -67,12 +73,12 @@ public class Board extends Table{
                     destiny.add(chip);
                     destiny.setHasAChip(true);
                     origen.setHasAChip(false);
+
                 }else {
                     chip.setLocation(0,0);
                     origen.add(chip);
                 }
-                System.out.println("Estado de origen: "+origen.getHasAChip());
-                System.out.println("Estado de destino: "+destiny.getHasAChip());
+
                 layeredPane.remove(chip);
                 layeredPane.setCursor(Cursor.getDefaultCursor());
 
