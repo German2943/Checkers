@@ -39,10 +39,12 @@ public abstract class Table extends JFrame {
                         if (((row==0)||(row==2)) && (col%2==0)){
                             chip singleChip=new chip(color);
                             singleBox.add(singleChip);
+                            singleBox.setHasAChip(true);
                             enableDrag(singleChip);
                         }else if((row==1) && (col%2!=0)){
                             chip singleChip=new chip(color);
                             singleBox.add(singleChip);
+                            singleBox.setHasAChip(true);
                             enableDrag(singleChip);
                         }
                     }
@@ -52,10 +54,12 @@ public abstract class Table extends JFrame {
                         if (((row==numRows-1)||(row==numRows-3)) && (col%2==0)){
                             chip singleChip=new chip(color);
                             singleBox.add(singleChip);
+                            singleBox.setHasAChip(true);
                             enableDrag(singleChip);
                         }else if((row==numRows-2) && (col%2!=0)){
                             chip singleChip=new chip(color);
                             singleBox.add(singleChip);
+                            singleBox.setHasAChip(true);
                             enableDrag(singleChip);
                         }
                     }

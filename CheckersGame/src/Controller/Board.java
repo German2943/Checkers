@@ -53,15 +53,26 @@ public class Board extends Table{
                         if (color.equals("black") && deltaY==1){
                             validMove=true;
                         }
+                    }else if(Math.abs(deltaX)==2){
+                        if (color.equals("white") && deltaY==-1){
+                            validMove=true;
+                        }
+                        if (color.equals("black") && deltaY==1){
+                            validMove=true;
+                        }
                     }
                 }
                 if (validMove){
                     chip.setLocation(0,0);
                     destiny.add(chip);
+                    destiny.setHasAChip(true);
+                    origen.setHasAChip(false);
                 }else {
                     chip.setLocation(0,0);
                     origen.add(chip);
                 }
+                System.out.println("Estado de origen: "+origen.getHasAChip());
+                System.out.println("Estado de destino: "+destiny.getHasAChip());
                 layeredPane.remove(chip);
                 layeredPane.setCursor(Cursor.getDefaultCursor());
 

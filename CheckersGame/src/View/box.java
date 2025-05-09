@@ -3,12 +3,19 @@ import javax.swing.JPanel;
 import java.awt.*;
 
 public class box extends JPanel{
+    private boolean hasAChip=false;
     private int coordinateX;
     private int coordinateY;
     BorderLayout border=new BorderLayout();
     public box(){
 
 
+    }
+    public boolean getHasAChip(){
+        return this.hasAChip;
+    }
+    public void setHasAChip(boolean hasIt){
+        this.hasAChip=hasIt;
     }
 
     public int getCoordinateX(){
