@@ -1,10 +1,13 @@
 package View;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class Table extends JFrame {
-    int numRows=9;
-    int numCols=7;
+    private int numRows=9;
+    private int numCols=7;
+
+
     public Table(){
         setTitle("Checkers Game");
         setSize(600, 600);
@@ -12,6 +15,8 @@ public class Table extends JFrame {
 
         JPanel tablePanel= new JPanel();
         tablePanel.setLayout(new GridLayout(numRows,numCols));
+
+
 
         for (int row=0; row<numRows; row++){
             for(int col=0; col<numCols; col++){
@@ -25,20 +30,22 @@ public class Table extends JFrame {
                 }else {
                     singleBox.setBackground(Color.DARK_GRAY);
                 }
-                if ((row<=1) || (row>=(numRows-1))){
-
-                    ImageIcon img=null;
+                if ((row<=1) || (row>=(numRows-2))){
+                    String color=null;
                     if(row<=1){
-                        img=new ImageIcon(getClass().getResource("img/black.png"));
-                    }else if(row>=(numRows-1)){
-                        img=new ImageIcon(getClass().getResource("img/white.png"));
+                        color="black";
+                    }
+                    if((row>=(numRows-2)) ){
+                        color="white";
                     }
 
 
-                    JLabel LabelImg=new JLabel(img);
-                    LabelImg.setHorizontalAlignment(SwingConstants.CENTER);
-                    LabelImg.setVerticalAlignment(SwingConstants.CENTER);
-                    singleBox.add(LabelImg, BorderLayout.CENTER);
+
+
+                    chip singleChip=new chip(color);
+                    singleBox.add(singleChip);
+                    enableDrag(singleChip);
+
                 }
                 tablePanel.add(singleBox);
 
@@ -46,5 +53,54 @@ public class Table extends JFrame {
         }
         add(tablePanel);
         setVisible(true);
+    }
+
+    private void enableDrag(chip chip){
+        final Point[] offset={new Point()};
+        final JLayeredPane layeredPane=getLayeredPane();
+        final Container[] parentBox={null};
+        chip.addMouseListener(new java.awt.event.MouseAdapter(){
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent e){
+                parentBox[0]=chip.getParent();
+                offset[0]=e.getPoint();
+                layeredPane.add(chip, JLayeredPane.DRAG_LAYER);
+                layeredPane.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+
+            }
+            @Override
+            public void mouseReleased(java.awt.event.MouseEvent e){
+                Component comp=SwingUtilities.getDeepestComponentAt(getContentPane(), e.getXOnScreen()-getLocationOnScreen().x, e.getYOnScreen()-getLocationOnScreen().y);
+
+                if (comp instanceof box){
+                    box destiny=(box) comp;
+                    chip.setLocation(0,0);
+                    destiny.add(chip);
+                }else if(comp !=null && comp.getParent() instanceof box){
+                    box destiny=(box) comp.getParent();
+                    chip.setLocation(0,0);
+                    destiny.add(chip);
+                }else {
+                    if (parentBox[0]!=null){
+                        chip.setLocation(0,0);
+                        parentBox[0].add(chip);
+                    }
+                }
+                layeredPane.remove(chip);
+                layeredPane.setCursor(Cursor.getDefaultCursor());
+                parentBox[0].revalidate();
+                parentBox[0].repaint();
+                getContentPane().revalidate();
+                getContentPane().repaint();
+            }
+        });
+        chip.addMouseMotionListener(new java.awt.event.MouseMotionAdapter(){
+            @Override
+            public void mouseDragged(java.awt.event.MouseEvent e){
+                Point mousePoint=SwingUtilities.convertPoint(chip,e.getPoint(), layeredPane);
+                chip.setLocation(mousePoint.x - offset[0].x, mousePoint.y - offset[0].y);
+                chip.repaint();
+            }
+        });
     }
 }
