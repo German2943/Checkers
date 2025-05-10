@@ -48,6 +48,8 @@ public class Board extends Table{
                     String color=chip.getColor();
 
                     if (Math.abs(deltaX)==1){
+
+
                         if (color.equals("white") && deltaY==-1){
                             validMove=true;
                         }
@@ -55,45 +57,80 @@ public class Board extends Table{
                             validMove=true;
                         }
                     }else if(Math.abs(deltaX)==2){
-                        if (color.equals("white") && deltaY==-2 ){
-                            if ((getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].getHasAChip())||(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].getHasAChip())){
-                                validMove=true;
-                                if (deltaX==2){
-                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].removeAll();
-                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].revalidate();
-                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].repaint();
+                        System.out.println("verificación de cambio en Y");
+                        if (verifyOutBounds(origen.getCoordinateY(), origen.getCoordinateX())){
+                            boolean chipExists1=(getChip(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1])!=null);
+                            boolean chipExists2=(getChip(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1])!=null);
+                            boolean chipExists3=(getChip(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1])!=null);
+                            boolean chipExists4=(getChip(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1])!=null);
 
-                                }else if (deltaX==-2){
-                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].removeAll();
-                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].revalidate();
-                                    getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].repaint();
+                            System.out.println("verificación de límites de coordenadas");
+                            System.out.println("existe chip3: "+chipExists3);
+                            System.out.println("existe chip4: "+chipExists4);
+                            if (color.equals("white") && deltaY==-2 ){
+                                if (chipExists3 || chipExists4){
+                                    System.out.println("traspaso de existencia de chips");
+                                    boolean isBlack=((getChip(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1]).getColor().equalsIgnoreCase("black"))||((getChip(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1]).getColor().equalsIgnoreCase("black"))));
+                                    if ( (isBlack) && ((getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].getHasAChip())||(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].getHasAChip()))){
+                                        validMove=true;
+                                        if (deltaX==2){
+                                            getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].removeAll();
+                                            getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].revalidate();
+                                            getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].repaint();
+
+                                        }else if (deltaX==-2){
+                                            getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].removeAll();
+                                            getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].revalidate();
+                                            getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()-1].repaint();
+                                        }
+                                    }
                                 }
+
+
+                            }
+                            if (color.equals("black") && deltaY==2){
+                                if (chipExists1 || chipExists2){
+                                    boolean isWhite=((getChip(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1]).getColor().equalsIgnoreCase("white"))||((getChip(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1]).getColor().equalsIgnoreCase("white"))));
+                                    if ( (isWhite) && ((getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].getHasAChip())||(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].getHasAChip()))){
+                                        validMove=true;
+                                        if (deltaX==2){
+                                            getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].removeAll();
+                                            getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].revalidate();
+                                            getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].repaint();
+
+                                        }else if (deltaX==-2){
+                                            getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].removeAll();
+                                            getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].revalidate();
+                                            getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].repaint();
+                                        }
+                                    }
+                                }
+
                             }
 
                         }
-                        if (color.equals("black") && deltaY==2){
-                            if ((getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].getHasAChip())||(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].getHasAChip())){
-                                validMove=true;
-                                if (deltaX==2){
-                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].removeAll();
-                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].revalidate();
-                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].repaint();
 
-                                }else if (deltaX==-2){
-                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].removeAll();
-                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].revalidate();
-                                    getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()-1].repaint();
-                                }
-                            }
+
+                    }
+                    if (chip.getIsQueen()){
+                        if (Math.abs(deltaX)==Math.abs(deltaY)){
+                            validMove=true;
+
                         }
                     }
                 }
                 if (validMove){
+                    System.out.println("Origen x:"+origen.getCoordinateX());
+                    System.out.println("Origen y:"+origen.getCoordinateY());
                     chip.setLocation(0,0);
                     destiny.add(chip);
                     destiny.setHasAChip(true);
                     origen.setHasAChip(false);
                     if (chip.getColor().equalsIgnoreCase("black") && (destiny.getCoordinateY()==getNumRows()-1)){
+                        chip.changeToQueen();
+
+                    }
+                    if (chip.getColor().equalsIgnoreCase("white") && (destiny.getCoordinateY()==0)){
                         chip.changeToQueen();
 
                     }
@@ -120,5 +157,25 @@ public class Board extends Table{
                 chip.repaint();
             }
         });
+    }
+
+    public chip getChip(JPanel panel){
+        for (Component comp : panel.getComponents()) {
+            if (comp instanceof chip) {
+                chip innerPanel = (chip) comp;
+                return innerPanel;
+
+            }
+        }
+        return null;
+
+    }
+    public boolean verifyOutBounds(int row, int col){
+        if (row+1<getNumRows() && row-1>=0 && col+1<getNumRows() && col-1>=0){
+            return true;
+        }else {
+            return false;
+        }
+
     }
 }
