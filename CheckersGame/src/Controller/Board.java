@@ -151,39 +151,50 @@ public class Board extends Table{
 
                     }
                     if (chip.getIsQueen()){
-                        boolean ObstacleExist=false;
+
 
                         int row=origen.getCoordinateY();
                         int col=origen.getCoordinateX();
                         while (Math.abs(deltaX)==Math.abs(deltaY) && row >=0 && row<getNumRows() && col>=0 && col<getNumCols()){
 
                             box diagonal=getBoxes()[row][col];
-                            if(diagonal.getHasAChip()){
-                                System.out.println("destino X: "+destiny.getCoordinateX());
-                                System.out.println("destino Y: "+destiny.getCoordinateY());
-                                System.out.println("casilla con ficha X: "+col);
-                                System.out.println("casilla con ficha Y: "+row);
+                            box last=null;
+
+                            int orientation=0;
+                            if ((deltaX>0)&&(deltaY>0)){
+                                orientation=1;
+                                System.out.println("orientación 1");
+                            } else if ((deltaX>0)&&(deltaY<0)) {
+                                orientation=2;
+                                System.out.println("orientación 2");
+                            }else if ((deltaX<0)&&(deltaY<0)) {
+                                orientation=3;
+                                System.out.println("orientación 3");
+                            }else if ((deltaX<0)&&(deltaY>0)) {
+                                System.out.println("orientación 4");
+                                orientation=4;
                             }
-
-                            if( ((diagonal.getCoordinateX()!=origen.getCoordinateX())&&(diagonal.getCoordinateY()!=origen.getCoordinateY()))&&diagonal.getHasAChip() && (((diagonal.getCoordinateX()==destiny.getCoordinateX()-1)||(diagonal.getCoordinateX()==destiny.getCoordinateX()+1))&&((diagonal.getCoordinateY()==destiny.getCoordinateY()-1)||(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)))){
-
-
-                                if((deltaX>0)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()-1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()-1)){
+                            if( ((diagonal.getCoordinateX()!=origen.getCoordinateX())&&(diagonal.getCoordinateY()!=origen.getCoordinateY()))&&(diagonal.getHasAChip() )&& (((diagonal.getCoordinateX()==destiny.getCoordinateX()-1)||(diagonal.getCoordinateX()==destiny.getCoordinateX()+1))&&((diagonal.getCoordinateY()==destiny.getCoordinateY()-1)||(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)))){
 
 
 
-                                        if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
-                                            validMove=true;
-                                            diagonal.removeAll();
-                                            diagonal.revalidate();
-                                            diagonal.repaint();
-                                            diagonal.setHasAChip(false);
-                                            break;
-                                        }
+                                if((orientation==1)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()-1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()-1)){
+                                    System.out.println("O1");
+
+
+                                    if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
+                                        validMove=true;
+                                        diagonal.removeAll();
+                                        diagonal.revalidate();
+                                        diagonal.repaint();
+                                        diagonal.setHasAChip(false);
+
+                                    }
 
 
 
-                                } else if ((deltaX<0)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()+1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)) {
+                                } else if ((orientation==2)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()-1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)) {
+                                    System.out.println("O2 ");
                                     if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
                                         validMove=true;
                                         diagonal.removeAll();
@@ -191,16 +202,35 @@ public class Board extends Table{
                                         diagonal.repaint();
                                         diagonal.setHasAChip(false);
                                     }
-                                } else if ((deltaX>0)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()+1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)) {
-                                    validMove=true;
-                                }else if ((deltaX<0)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()-1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()-1)) {
-                                    validMove=true;
+                                } else if ((orientation==3)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()+1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)) {
+                                    System.out.println("O3 ");
+                                    if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
+                                        validMove=true;
+                                        diagonal.removeAll();
+                                        diagonal.revalidate();
+                                        diagonal.repaint();
+                                        diagonal.setHasAChip(false);
+                                    }
+                                }else if ((orientation==4)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()+1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()-1)) {
+                                    System.out.println("O4 ");
+                                    if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
+                                        validMove=true;
+                                        diagonal.removeAll();
+                                        diagonal.revalidate();
+                                        diagonal.repaint();
+                                        diagonal.setHasAChip(false);
+                                    }
                                 }
-                            } else if (!diagonal.getHasAChip() && (Math.abs(deltaX)==Math.abs(deltaY))) {
+                            } else if ((Math.abs(deltaX)==Math.abs(deltaY))) {
+                                System.out.println("O5");
+
                                 validMove=true;
+
+
                             }
                             col += (deltaX>0) ? 1:-1;
                             row += (deltaY>0) ? 1:-1;
+                            last=diagonal;
 
                         }
 
@@ -209,8 +239,6 @@ public class Board extends Table{
                     }
                 }
                 if (validMove){
-                    System.out.println("Origen x:"+origen.getCoordinateX());
-                    System.out.println("Origen y:"+origen.getCoordinateY());
                     chip.setLocation(0,0);
                     destiny.add(chip);
                     destiny.setHasAChip(true);
