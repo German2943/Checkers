@@ -3,8 +3,22 @@ import View.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Board extends Table{
+    private JFrame startFrame;
+    public Board(JFrame startFrame){
+        this.startFrame=startFrame;
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e){
+                startFrame.setVisible(true);
+            }
+        });
+    }
+
     @Override
     public   void enableDrag(chip chip){
 
@@ -255,6 +269,17 @@ public class Board extends Table{
                 }else {
                     chip.setLocation(0,0);
                     origen.add(chip);
+                    Object[] options = { "Understood" };
+                    JOptionPane.showOptionDialog(
+                            null,
+                            "INVALID MOVE",
+                            "WARNING",
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE,
+                            null,
+                            options,
+                            options[0]
+                    );
                 }
 
                 layeredPane.remove(chip);

@@ -1,8 +1,11 @@
 package View;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public abstract class Table extends JFrame {
+
     private int numRows=8;
     private int numCols=8;
     private box[][] boxes=new box[numRows][numCols];
@@ -11,10 +14,14 @@ public abstract class Table extends JFrame {
         return this.boxes;
     }
     public Table(){
+
+
+
+
         setTitle("Checkers Game");
         setSize(700, 700);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
         JPanel tablePanel= new JPanel();
         tablePanel.setLayout(new GridLayout(numRows,numCols));
 

@@ -1,7 +1,13 @@
 import Controller.*;
+import View.DefaultFrame;
+
+import javax.swing.*;
 
 public class Main {
+
     public static void main(String[] args) {
-        new Board();
+        SwingUtilities.invokeLater(() -> {
+            new DefaultFrame().setVisible(true);
+        });
     }
 }
