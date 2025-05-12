@@ -1,8 +1,6 @@
 package View;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public abstract class Table extends JFrame {
 
