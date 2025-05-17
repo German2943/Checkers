@@ -71,27 +71,20 @@ public class Board extends Table{
                             validMove=true;
                         }
                     }else if(Math.abs(deltaX)==2){
-                        System.out.println("verificación de cambio en Y");
 
 
 
 
 
-                        System.out.println("verificación de límites de coordenadas");
 
 
                         if (color.equals("white") && deltaY==-2 ){
-                            System.out.println("confirmación de cambio en Y");
-                            System.out.println("delta Y: "+deltaY);
-                            System.out.println("delta X: "+deltaX);
+
                             if (deltaX==2){
-                                System.out.println("confirmación de cambio positivo en x");
                                 boolean chipExists3=(getChip(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1])!=null);
                                 if (chipExists3){
-                                    System.out.println("confirmación de existencia de chip");
                                     boolean isBlack=((getChip(getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1]).getColor().equalsIgnoreCase("black")));
                                     if ( (isBlack) && ((getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].getHasAChip()))){
-                                        System.out.println("confirmación de color y prescencia en columna y fila");
                                         validMove=true;
                                         getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].removeAll();
                                         getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].revalidate();
@@ -122,17 +115,12 @@ public class Board extends Table{
 
 
                         if (color.equals("black") && deltaY==2 ){
-                            System.out.println("confirmación de cambio en Y");
-                            System.out.println("delta Y: "+deltaY);
-                            System.out.println("delta X: "+deltaX);
+
                             if (deltaX==2){
-                                System.out.println("confirmación de cambio positivo en x");
                                 boolean chipExists1=(getChip(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1])!=null);
                                 if (chipExists1){
-                                    System.out.println("confirmación de existencia de chip");
                                     boolean isWhite=((getChip(getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1]).getColor().equalsIgnoreCase("white")));
                                     if ( (isWhite) && ((getBoxes()[origen.getCoordinateY()-1][origen.getCoordinateX()+1].getHasAChip()))){
-                                        System.out.println("confirmación de color y prescencia en columna y fila");
                                         validMove=true;
                                         getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].removeAll();
                                         getBoxes()[origen.getCoordinateY()+1][origen.getCoordinateX()+1].revalidate();
@@ -193,7 +181,6 @@ public class Board extends Table{
 
 
                                 if((orientation==1)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()-1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()-1)){
-                                    System.out.println("O1");
 
 
                                     if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
@@ -208,7 +195,6 @@ public class Board extends Table{
 
 
                                 } else if ((orientation==2)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()-1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)) {
-                                    System.out.println("O2 ");
                                     if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
                                         validMove=true;
                                         diagonal.removeAll();
@@ -217,7 +203,6 @@ public class Board extends Table{
                                         diagonal.setHasAChip(false);
                                     }
                                 } else if ((orientation==3)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()+1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)) {
-                                    System.out.println("O3 ");
                                     if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
                                         validMove=true;
                                         diagonal.removeAll();
@@ -226,7 +211,6 @@ public class Board extends Table{
                                         diagonal.setHasAChip(false);
                                     }
                                 }else if ((orientation==4)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()+1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()-1)) {
-                                    System.out.println("O4 ");
                                     if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
                                         validMove=true;
                                         diagonal.removeAll();
@@ -236,7 +220,6 @@ public class Board extends Table{
                                     }
                                 }
                             } else if ((Math.abs(deltaX)==Math.abs(deltaY))) {
-                                System.out.println("O5");
 
                                 validMove=true;
 
@@ -312,12 +295,12 @@ public class Board extends Table{
         return null;
 
     }
-    public boolean verifyOutBounds(int row, int col){
-        if (row+1<getNumRows() && row-1>=0 && col+1<getNumRows() && col-1>=0){
-            return true;
-        }else {
-            return false;
-        }
 
+    public void removeChip(int gapX, int gapY, box Origin){
+        getBoxes()[Origin.getCoordinateY()+gapY][Origin.getCoordinateX()+gapX].removeAll();
+        getBoxes()[Origin.getCoordinateY()+gapY][Origin.getCoordinateX()+gapX].revalidate();
+        getBoxes()[Origin.getCoordinateY()+gapY][Origin.getCoordinateX()+gapX].repaint();
+        getBoxes()[Origin.getCoordinateY()+gapY][Origin.getCoordinateX()+gapX].setHasAChip(false);
     }
+
 }
