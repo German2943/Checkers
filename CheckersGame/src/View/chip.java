@@ -10,12 +10,14 @@ public class chip extends JPanel{
         setLayout(new BorderLayout());
 
         ImageIcon icon= new ImageIcon(getClass().getResource("img/"+this.color+".png"));
-        imageLabel=new JLabel(icon);
+        ImageIcon scaledImage =new ImageIcon(icon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH))  ;
+        imageLabel=new JLabel(scaledImage);
         imageLabel.setHorizontalAlignment(JLabel.CENTER);
         imageLabel.setVerticalAlignment(JLabel.CENTER);
 
         add(imageLabel, BorderLayout.CENTER);
         setOpaque(false);
+        setPreferredSize(new Dimension(35,35));
 
 
 
@@ -44,4 +46,5 @@ public class chip extends JPanel{
     public String getColor(){
         return this.color;
     }
+
 }
