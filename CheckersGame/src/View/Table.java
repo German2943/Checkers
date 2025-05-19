@@ -1,16 +1,81 @@
 package View;
+import View.Buttons.SaveBtn;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public abstract class Table extends JFrame {
 
     private int numRows=8;
     private int numCols=8;
     private box[][] boxes=new box[numRows][numCols];
+    private String player1="Player1";
+    private String player2="Player2";
+    private String winner=null;
+    private int matchNumber=1;
+    private String matchTitle;
+    private ArrayList<String> movementsList =new ArrayList<>();
+    protected JButton saveButton=new SaveBtn();
 
 
+    public ArrayList<String> getMovementsList() {
+        return movementsList;
+    }
 
+    public void setMovementsList(ArrayList<String> movements) {
+        this.movementsList = movements;
+    }
+
+    public String getMatchTitle() {
+        return matchTitle;
+    }
+
+    public void setMatchTitle() {
+        this.matchTitle = "match#"+getMatchNumber();
+    }
+
+    public int getMatchNumber() {
+        return matchNumber;
+    }
+
+    public void setMatchNumber() {
+        this.matchNumber = this.matchNumber+1;
+    }
+
+    public void setNumRows(int numRows) {
+        this.numRows = numRows;
+    }
+
+    public String getPlayer1() {
+        return this.player1;
+    }
+
+    public void setPlayer1(String player1) {
+        this.player1 = player1;
+    }
+
+    public String getPlayer2() {
+        return this.player2;
+    }
+
+    public void setPlayer2(String player2) {
+        this.player2 = player2;
+    }
+
+    public String getWinner() {
+        return this.winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
 
     public box[][] getBoxes(){
         return this.boxes;
@@ -61,8 +126,48 @@ public abstract class Table extends JFrame {
                         topPanel.add(filler);
                     }
                 }else {
+                    if (i==0 && j==0){
+                        setMatchTitle();
+
+                        this.saveButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                try {
+                                    File file = new File("matches/" + getMatchTitle() + ".txt");
+                                    file.getParentFile().mkdirs();
+                                    FileWriter writer=new FileWriter(file);
+                                    writer.write("[white "+getPlayer1()+"]"+System.lineSeparator());
+                                    writer.write("[black "+getPlayer2()+"]"+System.lineSeparator());
+                                    int scoreW=0;
+                                    int scoreB=0;
+                                    if (winner!=null){
+                                        if (winner.equalsIgnoreCase("black")){
+                                            scoreB=1;
+                                        } else if (winner.equalsIgnoreCase("white")) {
+                                            scoreW=1;
+                                        }
+                                    }
+                                    writer.write("[Result "+scoreB+"-"+scoreW+"]"+System.lineSeparator());
+                                    for (String line : getMovementsList()){
+                                        writer.write(line+System.lineSeparator());
+                                    }
+
+
+                                    writer.close();
+                                } catch (IOException ex) {
+                                    JOptionPane.showConfirmDialog(null,"ERROR");
+                                    ex.printStackTrace();
+                                    JOptionPane.showMessageDialog(null, "Error al guardar el archivo: " + ex.getMessage());
+
+                                }
+                            }
+                        });
+                        topPanel.add(saveButton);
+
+                    }
                     JPanel filler=new JPanel();
                     filler.setVisible(false);
+
                     topPanel.add(filler);
                 }
             }

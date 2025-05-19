@@ -45,7 +45,7 @@ public class DefaultFrame extends JFrame {
         JButton btn2 = new JButton("Btn2");
         gbc.gridx = 1;
         gbc.gridy = 1;
-        add(btn2, gbc);
+        //add(btn2, gbc);
 
 
 

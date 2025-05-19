@@ -3,18 +3,27 @@ import View.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
 
 public class Board extends Table{
-    private String singleMoveB=null;
-    private String singleMoveW=null;
+
+    private String singleMoveB="NoMove";
+    private String singleMoveW="NoMove";
     private HashMap<Integer,String> columns=new HashMap<>();
     private JFrame startFrame;
     private ArrayList<String> movements=new ArrayList<>();
     private int numberMove=1;
+    private int mainNumberMove=1;
+
+
     public Board(JFrame startFrame){
         setColumns();
         this.startFrame=startFrame;
@@ -29,6 +38,7 @@ public class Board extends Table{
 
     @Override
     public   void enableDrag(chip chip){
+
 
 
         final Point[] offset={new Point()};
@@ -47,6 +57,7 @@ public class Board extends Table{
             public void mouseReleased(java.awt.event.MouseEvent e){
                 Component comp=SwingUtilities.getDeepestComponentAt(getContentPane(), e.getXOnScreen()-getLocationOnScreen().x, e.getYOnScreen()-getLocationOnScreen().y);
                 box destiny=null;
+                boolean pieceRemoved=false;
                 if (comp instanceof box){
                     destiny=(box) comp;
 
@@ -55,6 +66,11 @@ public class Board extends Table{
                     destiny=(box) comp.getParent();
                 }
 
+
+                box eliminated=null;
+                String colorOpposite=null;
+                int gapX=0;
+                int gapY=0;
 
                 box origen=(box) parentBox[0];
                 boolean validMove=false;
@@ -90,12 +106,21 @@ public class Board extends Table{
                         if (color.equals("white") && deltaY==-2 ){
 
                             if (deltaX==2){
-                                validateRegularElimination(+1,-1,origen,"black");
+                                gapX=+1;
+                                gapY=-1;
+                                eliminated=origen;
+                                colorOpposite="black";
+
+                                pieceRemoved=true;
                                 validMove=true;
 
 
                             }else if (deltaX==-2){
-                                validateRegularElimination(-1,-1,origen,"black");
+                                gapX=-1;
+                                gapY=-1;
+                                eliminated=origen;
+                                colorOpposite="black";
+                                pieceRemoved=true;
                                 validMove=true;
                             }
 
@@ -108,12 +133,20 @@ public class Board extends Table{
                         if (color.equals("black") && deltaY==2 ){
 
                             if (deltaX==2){
-                                validateRegularElimination(+1,+1,origen,"white");
+                                gapX=+1;
+                                gapY=+1;
+                                eliminated=origen;
+                                colorOpposite="white";
+                                pieceRemoved=true;
                                 validMove=true;
 
 
                             }else if (deltaX==-2){
-                                validateRegularElimination(-1,+1,origen,"white");
+                                gapX=-1;
+                                gapY=+1;
+                                eliminated=origen;
+                                colorOpposite="white";
+                                pieceRemoved=true;
                                 validMove=true;
                             }
 
@@ -133,20 +166,16 @@ public class Board extends Table{
                         while (Math.abs(deltaX)==Math.abs(deltaY) && row >=0 && row<getNumRows() && col>=0 && col<getNumCols()){
 
                             box diagonal=getBoxes()[row][col];
-                            box last=null;
+
 
                             int orientation=0;
                             if ((deltaX>0)&&(deltaY>0)){
                                 orientation=1;
-                                System.out.println("orientación 1");
                             } else if ((deltaX>0)&&(deltaY<0)) {
                                 orientation=2;
-                                System.out.println("orientación 2");
                             }else if ((deltaX<0)&&(deltaY<0)) {
                                 orientation=3;
-                                System.out.println("orientación 3");
                             }else if ((deltaX<0)&&(deltaY>0)) {
-                                System.out.println("orientación 4");
                                 orientation=4;
                             }
                             if( ((diagonal.getCoordinateX()!=origen.getCoordinateX())&&(diagonal.getCoordinateY()!=origen.getCoordinateY()))&&(diagonal.getHasAChip() )&& (((diagonal.getCoordinateX()==destiny.getCoordinateX()-1)||(diagonal.getCoordinateX()==destiny.getCoordinateX()+1))&&((diagonal.getCoordinateY()==destiny.getCoordinateY()-1)||(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)))){
@@ -158,7 +187,10 @@ public class Board extends Table{
 
                                     if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
                                         validMove=true;
-                                        removeChip(0,0, diagonal);
+                                        gapX=0;
+                                        gapY=0;
+                                        eliminated=diagonal;
+                                        pieceRemoved=true;
 
                                     }
 
@@ -167,17 +199,27 @@ public class Board extends Table{
                                 } else if ((orientation==2)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()-1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)) {
                                     if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
                                         validMove=true;
-                                        removeChip(0,0, diagonal);
+                                        gapX=0;
+                                        gapY=0;
+                                        eliminated=diagonal;
+
+                                        pieceRemoved=true;
                                     }
                                 } else if ((orientation==3)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()+1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()+1)) {
                                     if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
                                         validMove=true;
-                                        removeChip(0,0, diagonal);
+                                        gapX=0;
+                                        gapY=0;
+                                        eliminated=diagonal;
+                                        pieceRemoved=true;
                                     }
                                 }else if ((orientation==4)&&(diagonal.getCoordinateX()==destiny.getCoordinateX()+1)&&(diagonal.getCoordinateY()==destiny.getCoordinateY()-1)) {
                                     if (!getChip(diagonal).getColor().equalsIgnoreCase(color)){
                                         validMove=true;
-                                        removeChip(0,0, diagonal);
+                                        gapX=0;
+                                        gapY=0;
+                                        eliminated=diagonal;
+                                        pieceRemoved=true;
                                     }
                                 }
                             } else if ((Math.abs(deltaX)==Math.abs(deltaY))) {
@@ -188,7 +230,7 @@ public class Board extends Table{
                             }
                             col += (deltaX>0) ? 1:-1;
                             row += (deltaY>0) ? 1:-1;
-                            last=diagonal;
+
 
                         }
 
@@ -196,28 +238,61 @@ public class Board extends Table{
 
                     }
                 }
+
+
                 if (validMove){
-                    chip.setLocation(0,0);
-                    destiny.add(chip);
-                    destiny.setHasAChip(true);
-                    origen.setHasAChip(false);
-                    if (chip.getColor().equalsIgnoreCase("black") && (destiny.getCoordinateY()==getNumRows()-1)){
-                        chip.changeToQueen();
+                    if(!(((getMainNumberMove()%2 !=0)&&(chip.getColor().equalsIgnoreCase("black")))||((getMainNumberMove()%2 ==0)&&(chip.getColor().equalsIgnoreCase("white"))))){
+                        validMove=false;
+                        chip.setLocation(0,0);
+                        origen.add(chip);
+                        Object[] options = { "Understood" };
+                        JOptionPane.showOptionDialog(
+                                null,
+                                "It's not this color's turn yet",
+                                "WARNING",
+                                JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.INFORMATION_MESSAGE,
+                                null,
+                                options,
+                                options[0]
+                        );
 
-                    }
-                    if (chip.getColor().equalsIgnoreCase("white") && (destiny.getCoordinateY()==0)){
-                        chip.changeToQueen();
-
-                    }
-                    if(chip.getColor().equalsIgnoreCase("black")){
-                        setSingleMoveB(origen, destiny);
                     }else {
-                        setSingleMoveW(origen, destiny);
-                        registMove();
-                        System.out.println(getMovements().getLast());
+                        chip.setLocation(0,0);
+                        destiny.add(chip);
+                        destiny.setHasAChip(true);
+                        origen.setHasAChip(false);
+                        if (chip.getColor().equalsIgnoreCase("black") && (destiny.getCoordinateY()==getNumRows()-1)){
+                            chip.changeToQueen();
+
+                        }
+                        if (chip.getColor().equalsIgnoreCase("white") && (destiny.getCoordinateY()==0)){
+                            chip.changeToQueen();
+
+                        }
+                        if(chip.getColor().equalsIgnoreCase("black")){
+                            setSingleMoveB(origen, destiny, pieceRemoved);
+                        }else {
+                            setSingleMoveW(origen, destiny, pieceRemoved);
+                            registMove();
+                            System.out.println(getMovements().getLast());
+                            setNumberMove();
+                            resetSingleMoveB();
+                            resetSingleMoveW();
+                        }
+                        if(pieceRemoved){
+                            if((chip.getIsQueen())){
+                                removeChip(gapX,gapY,eliminated);
+                            }else {
+                                validateRegularElimination(gapX,gapY,eliminated,colorOpposite);
+                            }
+
+                        }
+                        setMainNumberMove();
+
+                        endMessage(chip, chip.getColor());
                     }
 
-                    endMessage(chip);
 
                 }else {
                     chip.setLocation(0,0);
@@ -305,8 +380,10 @@ public class Board extends Table{
             return  false;
         }
     }
-    public void endMessage(chip Chip){
+    public void endMessage(chip Chip, String winner){
         if (matchEnded()){
+            registMove();
+            System.out.println(getMovements().getLast());
             Object[] options = { "Menu" };
             int Joption=JOptionPane.showOptionDialog(
                     null,
@@ -322,6 +399,7 @@ public class Board extends Table{
                 setVisible(false);
                 new DefaultFrame().setVisible(true);
             }
+            setWinner(winner);
 
 
         }
@@ -329,9 +407,7 @@ public class Board extends Table{
     public ArrayList<String> getMovements(){
         return this.movements;
     }
-    public void registMove(box origin, box destiny){
 
-    }
     public int getNumberMove(){
         return this.numberMove;
     }
@@ -352,14 +428,20 @@ public class Board extends Table{
     public HashMap<Integer, String> getColumns() {
         return this.columns;
     }
-    public String singleMove(box origin, box destiny){
-        return getColumns().get(origin.getCoordinateX())+String.valueOf(origin.getCoordinateY()+1)+"-"+getColumns().get(destiny.getCoordinateX())+String.valueOf(destiny.getCoordinateY()+1);
+    public String singleMove(box origin, box destiny, boolean pieceRemoved){
+        String separator=" ";
+        if(pieceRemoved){
+            separator="x";
+        }else {
+            separator="-";
+        }
+        return getColumns().get(origin.getCoordinateX())+String.valueOf(origin.getCoordinateY()+1)+separator+getColumns().get(destiny.getCoordinateX())+String.valueOf(destiny.getCoordinateY()+1);
     }
-    public void setSingleMoveB(box origin, box destiny){
-        this.singleMoveB=singleMove(origin,destiny);
+    public void setSingleMoveB(box origin, box destiny, boolean pieceRemoved){
+        this.singleMoveB=singleMove(origin,destiny, pieceRemoved);
     }
-    public void setSingleMoveW(box origin, box destiny){
-        this.singleMoveW=singleMove(origin,destiny);
+    public void setSingleMoveW(box origin, box destiny, boolean pieceRemoved){
+        this.singleMoveW=singleMove(origin,destiny, pieceRemoved);
     }
     public String getSingleMoveB(){
         return this.singleMoveB;
@@ -367,7 +449,63 @@ public class Board extends Table{
     public String getSingleMoveW(){
         return this.singleMoveW;
     }
+    public void resetSingleMoveB(){
+        this.singleMoveB="NoMove";
+    }
+    public void resetSingleMoveW(){
+        this.singleMoveW="NoMove";
+    }
     public void registMove(){
         getMovements().add(String.valueOf(getNumberMove())+". "+getSingleMoveB()+" "+getSingleMoveW());
+        getMovementsList().add(String.valueOf(getNumberMove())+". "+getSingleMoveB()+" "+getSingleMoveW());
+        this.saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    File file = new File("matches/" + getMatchTitle() + ".txt");
+                    file.getParentFile().mkdirs();
+                    FileWriter writer=new FileWriter(file);
+                    writer.write("[white "+getPlayer1()+"]"+System.lineSeparator());
+                    writer.write("[black "+getPlayer2()+"]"+System.lineSeparator());
+
+                    int scoreW=0;
+                    int scoreB=0;
+                    if (getWinner()!=null){
+                        if (getWinner().equalsIgnoreCase("black")){
+                            scoreB=1;
+                        } else if (getWinner().equalsIgnoreCase("white")) {
+                            scoreW=1;
+                        }
+                    }
+                    writer.write("[Result "+scoreB+"-"+scoreW+"]"+System.lineSeparator());
+                    for (String line : getMovementsList()){
+                        writer.write(line+System.lineSeparator());
+                    }
+
+
+                    writer.close();
+                } catch (IOException ex) {
+                    JOptionPane.showConfirmDialog(null,"ERROR");
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al guardar el archivo: " + ex.getMessage());
+
+                }
+            }
+        });
+
+
+
     }
+
+
+    public int getMainNumberMove(){
+        return this.mainNumberMove;
+
+    }
+    public void setMainNumberMove(){
+        this.mainNumberMove=this.mainNumberMove+1;
+    }
+
+
+
 }
