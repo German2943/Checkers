@@ -1,0 +1,9 @@
+[white Player1]
+[black Player2]
+[Result 0-0]
+1. d3-c4 e6-d5
+2. c4xe6 f7xd5
+3. b3-c4 d5xb3
+4. c2-d3 c6-d5
+5. d1-c2 b3xd1
+6. f3-g4 d1-a4
